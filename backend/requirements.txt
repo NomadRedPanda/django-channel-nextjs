@@ -1,0 +1,10 @@
+django
+python-decouple
+psycopg[binary]
+
+
+channels[daphne]
+channels_redis
+
+
+selenium

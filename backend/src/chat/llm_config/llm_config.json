@@ -1,0 +1,85 @@
+
+[
+    {
+        "model": "grok-beta",
+        "api_key":"GROK_API_KEY",
+        "api_type": "openai",
+        "tags": ["grok","tool-use"],
+        "base_url": "https://api.x.ai/v1"
+    },
+    {
+        "model": "gpt-3.5-turbo",
+        "api_key":"OPENAI_API_KEY",
+        "api_type": "openai",
+        "tags": ["gpt3.5", "openai"],
+        "base_url": "https://api.openai.com/v1"
+    },
+    {
+        "model": "gpt-4o-mini-2024-07-18",
+        "api_key":"OPENAI_API_KEY",
+        "api_type": "openai",
+        "tags": ["gpt-4o-mini-2024-07-18", "openai"],
+        "base_url": "https://api.openai.com/v1"
+    },
+    {
+        "model": "meta-llama/llama-3.2-3b-instruct:free",
+        "api_key": "OPENROUTER_API_KEY",
+        "api_type": "openai",
+        "tags": ["llama3.2", "openrouter", "free", "instruct","small"],
+        "base_url": "https://openrouter.ai/api/v1",
+        "price" : [0, 0]
+    },
+    {
+        "model": "meta-llama/llama-3.2-3b-instruct",
+        "api_key": "OPENROUTER_API_KEY",
+        "api_type": "openai",
+        "tags": ["llama3.2", "openrouter", "instruct","tool-test11"],
+        "base_url": "https://openrouter.ai/api/v1"
+    },
+    {
+        "model": "meta-llama/llama-3.1-405b-instruct:free",
+        "api_key": "OPENROUTER_API_KEY",
+        "api_type": "openai",
+        "tags": ["llama-3.1-405b", "openrouter", "free", "instruct","large"],
+        "base_url": "https://openrouter.ai/api/v1",
+        "price" : [0, 0]
+    },
+    {
+        "model": "mistralai/mistral-7b-instruct:free",
+        "api_key": "OPENROUTER_API_KEY",
+        "api_type": "openai",
+        "tags": ["mistral", "openrouter", "free", "instruct","small"],
+        "base_url": "https://openrouter.ai/api/v1",
+        "price" : [0, 0]
+    },
+    {
+        "model": "llama3.2:3b",
+        "api_key": "OLLAMA_API_KEY",
+        "api_type": "openai",
+        "tags": ["llama3.2", "local", "free", "instruct","small"],
+        "base_url":"http://localhost:11434/v1"
+
+    },
+    {
+        "model": "qwen2.5-coder:7b ",
+        "api_key": "OLLAMA_API_KEY",
+        "api_type": "openai",
+        "tags": ["qwen2.5", "local", "free", "instruct","small"],
+        "base_url":"http://localhost:11434/v1"
+
+    },
+    {
+        "model": "gemini-1.5-flash-latest",
+        "api_key": "GEMINI_API_KEY",
+        "api_type": "google",
+        "base_url":"https://generativelanguage.googleapis.com/v1beta/",
+        "tags": ["gemini"]
+    },
+    {
+        "model": "gemini-2.0-flash-exp",
+        "api_key": "GEMINI_API_KEY",
+        "api_type": "google",
+        "base_url":"https://generativelanguage.googleapis.com/v1beta/",
+        "tags": ["gemini"]
+    }    
+]
