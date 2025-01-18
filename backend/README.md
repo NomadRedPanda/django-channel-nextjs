@@ -1,37 +1,57 @@
 ### Installtion
 
 ```bash
-python -m pip install -U 'channels[daphne]'
+    python -m pip install -U 'channels[daphne]'
 ```
 
 - Install the Daphne’s ASGI version of the runserve
   `AJHome/settings.py`
-  `python
-  INSTALLED_APPS = (
-  "daphne", #
-  "django.contrib.auth",
-  "django.contrib.contenttypes",
-  "django.contrib.sessions",
-  "django.contrib.sites",
-  ...
-  )
-  ...
-  # Channel
-  ASGI_APPLICATION = "AJHome.asgi.application"
-  `
+
+  ```python
+    INSTALLED_APPS = (
+    "daphne", #
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.sites",
+                ...
+    )
+                ...
+
+    WSGI_APPLICATION = 'AJHome.wsgi.application'
+    ASGI_APPLICATION = "AJHome.asgi.application"
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("127.0.0.1", 6379)],
+            },
+        },
+    }
+
+  ```
+
 - Wrap Django ASGI application
   `AJHome/asgi.py`
 
   ```python
-  import os
-  from channels.routing import ProtocolTypeRouter
-  from django.core.asgi import get_asgi_application
+    # similar to AJHome/urls.py
+    import os
+    from channels.auth import AuthMiddlewareStack
+    from channels.routing import ProtocolTypeRouter, URLRouter
+    from channels.security.websocket import AllowedHostsOriginValidator
+    from django.core.asgi import get_asgi_application
+    from chat.routing import websocket_urlpatterns
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'AJHome.settings')
 
-  os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'AJHome.settings')
-
-  application = ProtocolTypeRouter({
-      "http": get_asgi_application(),
-  })
+    application = ProtocolTypeRouter(
+        {
+            "http": get_asgi_application(),
+            "websocket": AllowedHostsOriginValidator(
+                AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
+            ),
+        }
+    )
   ```
 
 - when you run `python manage.py runserver` you will see
@@ -39,8 +59,6 @@ python -m pip install -U 'channels[daphne]'
 
 ### Implement a Chat server
 
-- In http request, urls.py -> views.py
-- Websocet connection, routing.py -> consumers.py
 - Created a consumer that accepts WebSocket connections
   `chat/consumers.py`
 
@@ -67,6 +85,7 @@ python -m pip install -U 'channels[daphne]'
   `chat/routing.py`
 
   ```python
+
   # similar to urls.py
   from django.urls import re_path
   from . import consumers
@@ -81,7 +100,6 @@ python -m pip install -U 'channels[daphne]'
 
   ```python
   # similar to AJHome/urls.py
-      ...
 
   from chat.routing import websocket_urlpatterns
   application = ProtocolTypeRouter(
@@ -92,7 +110,6 @@ python -m pip install -U 'channels[daphne]'
           ),
       }
   )
-
   ```
 
 - Enable a channel layer: to have multiple instances of the same ChatConsumer be able to talk to each other
@@ -103,17 +120,16 @@ python -m pip install -U 'channels[daphne]'
    `AJHome/settings.py`
 
   ```python
-  # Channels
-  ASGI_APPLICATION = "AJHome.asgi.application"
-  #It's possible to have multiple channel layers configured. However most projects will just use a single 'default' channel layer.
-  CHANNEL_LAYERS = {
-      "default": {
-          "BACKEND": "channels_redis.core.RedisChannelLayer",
-          "CONFIG": {
-              "hosts": [("127.0.0.1", 6379)],
-          },
-      },
-  }
+    # Channels
+    ASGI_APPLICATION = "AJhome.asgi.application"
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("127.0.0.1", 6379)],
+            },
+        },
+    }
 
   ```
 
